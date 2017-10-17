@@ -1,0 +1,122 @@
+%Rohma Shakeel
+%task1
+im = imread('cameraman.tif');
+dim = im2double(im);
+figure
+subplot(2,4,1),imshow(im);
+title('original');
+subplot(2,4,2),imshow(imnoise(im,'gaussian'));
+title('gaussian');
+subplot(2,4,3),imshow(imnoise(im,'poisson'));
+title('poisson');
+subplot(2,4,4),imshow(imnoise(im,'salt & pepper'));
+title('salt & pepper');
+subplot(2,4,5),imshow(imnoise(im,'speckle'));
+title('speckle');
+subplot(2,4,6),imshow(Pepper_Or_Salt(dim, 0.09, 1));
+title('pepper implementation');
+subplot(2,4,7),imshow(Pepper_Or_Salt(dim, 0.09, 2));
+title('salt implementation');
+subplot(2,4,8),imshow(Pepper_Or_Salt(dim, 0.09, 3));
+title('both');
+
+%task2a
+avgfilt1 = imfilter(imnoise(im,'gaussian'),fspecial('average'));
+avgfilt2 = imfilter(imnoise(im,'poisson'),fspecial('average'));
+avgfilt3 = imfilter(imnoise(im,'salt & pepper'),fspecial('average'));
+avgfilt7 = imfilter(imnoise(im,'speckle'),fspecial('average'));
+avgfilt4 = imfilter(Pepper_Or_Salt(dim, 0.09, 1),fspecial('average'));
+avgfilt5 = imfilter(Pepper_Or_Salt(dim, 0.09, 2),fspecial('average'));
+avgfilt6 = imfilter(Pepper_Or_Salt(dim, 0.09, 3),fspecial('average'));
+
+figure
+subplot(2,4,1),imshow(im);
+title('original');
+subplot(2,4,2),imshow(avgfilt1);
+title('gaussian');
+subplot(2,4,3),imshow(avgfilt2);
+title('poisson');
+subplot(2,4,4),imshow(avgfilt3);
+title('salt & pepper');
+subplot(2,4,5),imshow(avgfilt7);
+title('speckle');
+subplot(2,4,6),imshow(avgfilt4);
+title('pepper implementation');
+subplot(2,4,7),imshow(avgfilt5);
+title('salt implementation');
+subplot(2,4,8),imshow(avgfilt6);
+title('both');
+
+%task2b
+geo_meang = imfilter(log(im2double(imnoise(im,'gaussian'))), 3, 'replicate');
+geo_meang = exp(geo_meang);
+geo_meang = geo_meang .^ (1/numel(3));
+
+geo_mean1 = imfilter(log(im2double(imnoise(im,'poisson'))), 3, 'replicate');
+geo_mean1 = exp(geo_mean1);
+geo_mean1 = geo_mean1 .^ (1/numel(3));
+
+geo_mean2 = imfilter(log(im2double(imnoise(im,'salt & pepper'))), 3, 'replicate');
+geo_mean2 = exp(geo_mean2);
+geo_mean2 = geo_mean2 .^ (1/numel(3));
+
+geo_mean6 = imfilter(log(im2double(imnoise(im,'speckle'))), 3, 'replicate');
+geo_mean6 = exp(geo_mean6);
+geo_mean6 = geo_mean6 .^ (1/numel(3));
+
+geo_mean3 = imfilter(log(im2double(Pepper_Or_Salt(dim, 0.09, 1))), 3, 'replicate');
+geo_mean3 = exp(geo_mean3);
+geo_mean3 = geo_mean3 .^ (1/numel(3));
+
+geo_mean4 = imfilter(log(im2double(Pepper_Or_Salt(dim, 0.09, 2))), 3, 'replicate');
+geo_mean4 = exp(geo_mean4);
+geo_mean4 = geo_mean4 .^ (1/numel(3));
+
+geo_mean5 = imfilter(log(im2double(Pepper_Or_Salt(dim, 0.09, 3))), 3, 'replicate');
+geo_mean5 = exp(geo_mean5);
+geo_mean5 = geo_mean5 .^ (1/numel(3));
+
+figure
+subplot(2,4,1),imshow(im, []);
+title('original');
+subplot(2,4,2),imshow(geo_meang, []);
+title('gaussian');
+subplot(2,4,3),imshow(geo_mean1, []);
+title('poisson');
+subplot(2,4,4),imshow(geo_mean2, []);
+title('salt & pepper');
+subplot(2,4,5),imshow(geo_mean6, []);
+title('speckle');
+subplot(2,4,6),imshow(geo_mean3, []);
+title('pepper implementation');
+subplot(2,4,7),imshow(geo_mean4, []);
+title('salt implementation');
+subplot(2,4,8),imshow(geo_mean5, []);
+title('both');
+
+%task2c
+hm1 = (3*3) ./ imfilter(1 ./ ((imnoise(dim,'gaussian')) + eps), ones(3, 3), 'replicate');
+hm2 = (3*3) ./ imfilter(1 ./ ((imnoise(dim,'poisson')) + eps), ones(3, 3), 'replicate');
+hm3 = (3*3) ./ imfilter(1 ./ ((imnoise(dim,'salt & pepper')) + eps), ones(3, 3), 'replicate');
+hm4 = (3*3) ./ imfilter(1 ./ ((imnoise(dim,'speckle')) + eps), ones(3, 3), 'replicate');
+hm5 = (3*3) ./ imfilter(1 ./ ((Pepper_Or_Salt(dim, 0.09, 1)) + eps), ones(3, 3), 'replicate');
+hm6 = (3*3) ./ imfilter(1 ./ ((Pepper_Or_Salt(dim, 0.09, 2)) + eps), ones(3, 3), 'replicate');
+hm7 = (3*3) ./ imfilter(1 ./ ((Pepper_Or_Salt(dim, 0.09, 3)) + eps), ones(3, 3), 'replicate');
+
+figure
+subplot(2,4,1),imshow(im, []);
+title('original');
+subplot(2,4,2),imshow(hm1, []);
+title('gaussian');
+subplot(2,4,3),imshow(hm2, []);
+title('poisson');
+subplot(2,4,4),imshow(hm3, []);
+title('salt & pepper');
+subplot(2,4,5),imshow(hm4, []);
+title('speckle');
+subplot(2,4,6),imshow(hm5, []);
+title('pepper implementation');
+subplot(2,4,7),imshow(hm6, []);
+title('salt implementation');
+subplot(2,4,8),imshow(hm7, []);
+title('both');
